@@ -106,5 +106,92 @@ se puede hacer en   index.js   donde esta el componente  inicial / root
 importo el componente BrowserRouter  de  react-router-dom
 [16:00]
 
+En  app.js   importo 2 componentes desde   react-router-dom,  Routes y Route 
+Se utilizan para definir  multiples rutas  y una sola ruta
+
+En el return:
+    coloco el componente <Routes>  y dentro cada <Route >
+    con su path (ruta)  y  element(*1)
+
+Creo en  src  la carpeta  components
+Creo dentro los archivos .js   Home, Login, Register, Alert, ProtectedRoute
+
+Componente Home:
+    rfce (react funcional export component  TAB)
+    quito import, export en lin function, 
+
+En App (*1)  en element coloco el componente Home (lo importo arriba)
+Hago lo mismo para los compoonentes   Login y Register
+
+ESTILIZANDO CON TAILWINDCSS
+envuelvo el <Route> dentro de un div con las clases
+    .bg-slate-300-  h-screen   (colocan fondo, tamaño, abarcar alto max pantalla...)
+[24:00]
 
 
+
+CREANDO EL FORMULARIO PARA AÑADIR USUARIO
+para poder conocer el estado de un usuario (logueado etc.) en forma general se usa el  CONTEXTO de REACT
+Creo carpeta  context
+Creo archivo   authContext.js
+Creando un contexto:
+    importo la funcion de React {createContext} desde 'react'
+    la ejecuto   createContext(), devuelve un objeto, lo llamo context y guardo en variable 
+Ese context  permite   definir un proveedor  y  devolver objetos
+
+Creo una funcion   AuthProvider  *EN MAYUSCULAS pq es un COMPONENTE, va a devolver  JSX*
+que retorna un componente  <context.Provider> desde context trae un provider
+Dentro de este componente Provider  voy a colocar los componentes  HIJOS  Login Register, 
+al ser hijos pueden acceder al Provider
+paso la propiedad  children a la funcion  p q los componentes hijos accedan a las propiedades del padre
+
+Dentro de AuthProvider  defino un objeto  user   con  login en true
+Digo al Provider que va a tener un valor   value, que va a ser un objeto {}   el objeto user
+Ahora los elementos  hijos  (children)  van a poder acceder a la propiedad  user
+Exporto la funcion  p poder usarla en otro lado
+
+Como a este componente  AuthProvider lo voy a tener que usar en varios componentes (Login, register y seguramente mas)
+En vez de importarlo en c/u de ellos
+lo hago en App
+
+Ahora  ENVUELVO todas las RUTAS <Routes>  en el AuthProvider
+Asi todos los componentes tienen acceso a   user   siempre
+
+En  authContext  exporto el contexto   p poder usarlo en otro lugar
+Ese contexto me va a permitir  p ej  desde  home  acceder al valor de user
+El que CONTIENE EL VALOR  ES ESE CONTEXT
+EL AUTHPROVIDER ES EL QUE PERMITE UTILIZARLO EN CUALQUIER COMPONENTE
+en el home   importo el context  Y  el useContext  PARA PODER USAR EL DATO QUE DA CONTEXT
+EN EL AUTHCONTEXT  se CREO EL CONTEXTO,  ahora en el home para USARLO debo usar la funcion    useContext
+
+Ahora  en  home  puedo leer ese contexto
+    const authContext = useContext(context)
+    veo por consola  el objeto user
+
+Para no tener que hacer tantas importaciones en cada componente que use ese  user   creo un HOOK
+Un HOOK PERSONALIZADO en   authContext    useAuth
+
+en Home   Ya no tengo que importar    useContext  y  context [comentado]
+
+en  authContext    importo el  useContext
+dentro de la funcion  useAuth   ejecutamos el  useContext, le pasamos el  contexto
+POR CLARIDAD   RENOMBRO    CONTEXT  COMO  AUTHCONTEXT   EN   authContext.js  (en   const  y  return)
+
+Ahora si, el  useAuth   usa ese  useContext,  lo guardo en var   context
+Exporto  el nuevo  context   y todo sigue funcionando, 
+ahora solo tengo que llamar a  useAuth  desde cualquier lado y obtengo el context
+
+Ahora en  home   solo ejecuto el  useAuth (importarlo) , devuelve un objeto, llamo  authContext
+
+Mejorando, no traigo TODO el objeto   authContext  sino solo   user  {user}  y muestro por consola  (comentado ///)
+ahora accedo directamente a los valores   no al objeto completo
+[36:00]
+dejo todo esto comentado en  home - era para entender la logica
+
+en   authContext  se puede agregar 
+    if (!context) throw new Error('No hay un Provider...') 
+antes del return   por si no esta definido el  <Provider> ...  en App
+
+
+
+REGISTER USER  [39:00]
