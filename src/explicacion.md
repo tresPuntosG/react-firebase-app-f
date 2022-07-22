@@ -194,4 +194,96 @@ antes del return   por si no esta definido el  <Provider> ...  en App
 
 
 
+
 REGISTER USER  [39:00]
+Autenticando al usuario
+En componente  register  creo un formulario   que es lo que retorna el componente, 
+Agrego etiquetas  label  con sus  htmlFor  y name   para  email y password
+y boton
+
+Para guardar los datos que el usuario escriba  defino un ESTADO de react
+Importo la func  useState  desde  react, 
+dentro del useState  defino un usuario  user, la funcion será  setUser, inicialmente trendra  email y password en blanco
+
+Para ir actualizando el valor de  email y passw  a medida que va tipeando:
+Creo la funcion    handleChange 
+recibe un objeto de   EVENTO,  lo veo por consola
+Agrego en cada  input   su evento  onChange  le asigno  = {handleChange}
+
+para no ver por consola TODO el objeto, sino lo que se tipea y desde que input:
+muestro por consola  e.target.name  y   e.target.value   o sea  el nombre del input y el valor
+
+Esto mismo se puede hacer mejor   importando el evento asi:   target: {name, value}:
+desde el EVENTO , PROPIEDAD  target   EXTRAIGO  name y value
+
+Asi puedo mostrar directamente   name , value   ya sin   e.target. ...
+
+Ahora establezco en   user   el valor que viene en value, va entre {} pq user es un objeto
+
+Para no perder los valores que ya tenga cargada una propiedad al tipear otra, uso  ... 
+asi  copia los datos que tenga y luego  actualiza (agrega)
+
+Puedo comprobar esto en  herramientas desarrollados / componentes / hooks /state  voy viendo el ingreso de datos
+
+Agrego al formulario el  EVENTO  onsubmit y le asigno la funcion   handleSubmit
+Declaro  const   handleSubmit, recibe el evento e,  y lo que hace es:
+    cancela el evento de envio por defecto  - para que no se refresque la pagina
+    muestro por consola el usuario
+[47:00]
+
+ahora hay que enviar el  user  a Firebase:
+en la web  Firebase / documentacion / autenticacion / web / autenticacion de contraseña
+https://firebase.google.com/docs/auth/web/password-auth
+se usa la funcion   createUserWithEmailAndPassword
+
+pero antes, en  firebase / console:
+selecciono el proyecto / Autentitacion / Comenzar
+vamos a autenticar con   correo+contraseña  / habilitar      despues tambien c Google
+Ahora se van a poder autenticar con  email y poassw lo susuarios, se van a guardar en seccion  users
+Ahora se puede usar la funcion   createUserWithEmailAndPassword
+
+Llamo a la funcion    en  authContext
+creo la funcion   signUp    dentro de  authProvider
+
+signUp  recibe   email y assword, retorno: muestra por consola eso
+en el  authProvider elimino  el  user que tenia fijado como ejemplo en true, 
+ahora paso (exporto) en value un   signUp   , exporto el objeto
+
+Ahora para llamar un usuario, desde  register: 
+importo  desde  .. (subo un nivel) /context/authContext 
+
+ahora dentro de register  ejecuto la funcion useAuth, devuelve un objeto, 
+de ese objeto extraigo (la funcion)  signUp    {signUp}
+
+Ahora cuando se de  submit    EJECUTA el signUp, le paso  email y passw
+
+Entonces ahora en  authContext  importo  desde 'firebase/auth' y extraigo la funcion  createUserWithEmailAndPassword
+y en  authProvider  ejecuto  createUserWithEmailAndPassword  y le paso:
+auth  email  password
+auth esta en   firebase.js, lo importo desde ../firebase
+con eso envio los datos a firebase OK
+
+probamos (contraseña min 6 caracteres...)  verificamos en Firebase / users  OK
+[54:00]
+
+Para controlar si ocurrio algun error en el proceso de registro: 
+agrego un  try / catch
+si funciono el registro OK   signUp  sin error:  navego al home,  
+importo    useNavigate  desde   react-router-dom
+lo ejecuto, devuelve un objeto   navigate  que es una funcion
+
+luego del signUp   ejecuto  el navigate, lo mando a la ruta inicial  7
+
+como l,a funcion  signUp  es ASINCRONA
+* TODA PETICION A UN SERVIDOR ES ASINCRONA * 
+* TAMBIEN SE PUEDE INFERIR FACILMENTE MIRANDO LA DOC OFICIAL , 
+SI UNA FUNCION TIENE   THEN / CATH   ES ASINCRONA *
+
+agrego   await   a signUp   y   async  a handleSubmit 
+
+Para probar errores  cambio temporalmente el type del input del email a  text (para que no valide formato), 
+pruebo con mail incorrecto y pass menor a 6 char, 
+
+salen los errores por consola, para limitar a ver el texto del error  tomo  error.message
+[57:00]
+
