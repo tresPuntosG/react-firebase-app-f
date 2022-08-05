@@ -1,5 +1,10 @@
-import {createContext, useContext}  from 'react'
-import {createUserWithEmailAndPassword} from 'firebase/auth'
+import {createContext, useContext, useEffect, useState}  from 'react'
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+} from 'firebase/auth'
 import { auth } from "../firebase";
 
 
@@ -16,6 +21,9 @@ export const useAuth = () => {
 
 export function AuthProvider({children}){
 
+    const [user, setuser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
 
 
     const signUp = async(email, password) => {
@@ -23,8 +31,29 @@ export function AuthProvider({children}){
         await createUserWithEmailAndPassword(auth, email, password)
     }
 
+    const login = async (email, password) => {
+        const userCredentials =  await signInWithEmailAndPassword(auth, email, password);
+        //console.log(userCredentials)
+    }
+
+    const logout = () => signOut(auth);
+
+    useEffect(() => {
+      console.log('auth provider loader');
+      onAuthStateChanged(auth, currentUser => {
+        setuser(currentUser);
+        //console.log(user);
+        setLoading(false);
+      })
+    
+      return () => {
+        
+      }
+    }, [])
+    
+
     return(
-        <authContext.Provider value={{signUp}}>
+        <authContext.Provider value={{signUp, login, user, logout, loading}}>
             {children}
 
         </authContext.Provider>

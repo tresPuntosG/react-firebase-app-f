@@ -287,3 +287,4 @@ pruebo con mail incorrecto y pass menor a 6 char,
 salen los errores por consola, para limitar a ver el texto del error  tomo  error.message
 [57:00]
 
+[1:19 ]

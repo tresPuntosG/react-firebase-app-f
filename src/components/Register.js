@@ -22,6 +22,7 @@ export function Register() {
   // funcion que permite ver el estado
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('')
     // console.log(user);
     try {
       
@@ -30,8 +31,10 @@ export function Register() {
 
     } catch (error) {
       console.log(error.code)
-      //if (error.code === 'auth/invalid-email') {setError('Email inválido')}
-      setError(error.message);
+      //if (error.code === "auth/weak-password") {setError("Password mal")}
+      //console.log(error.message)
+      //console.log(error)
+      setError(error.code);
     }
   };
 
@@ -43,7 +46,7 @@ export function Register() {
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">Email</label>
         <input
-          type="text"
+          type="email"
           name="email"
           placeholder="tuemail@company.ltd"
           onChange={handleChange}
@@ -54,6 +57,7 @@ export function Register() {
           type="password"
           name="password"
           id="password"
+          placeholder='******'
           onChange={handleChange}
         />
 

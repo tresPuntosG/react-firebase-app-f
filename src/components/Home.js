@@ -1,17 +1,23 @@
-// import {useContext} from 'react'
-// import {context} from '../context/authContext'
-
-/// import { useAuth } from "../context/authContext";
+import { useNavigate } from 'react-router-dom'
+import {useAuth} from '../context/authContext'
 
 export function Home() {
-// const authContext = useContext(context)
-    /// const {user} = useAuth()
-    //   console.log(authContext);
-    ///  console.log(user);
+  const {user, logout, loading} = useAuth()
+  //console.log(user);
+  const navigate = useNavigate()
+  const handleLogout = async () => {
+      await logout();
+      navigate('/login');
+  }
+
+  if (loading) return <h1>loading...</h1>
 
   return (
-  
-
-    <div>Home</div>
+    <div>
+      <h1>Wellcome {user.email}</h1>
+      <button onClick={handleLogout}>
+        Salir
+      </button>
+    </div>
   )
 }
